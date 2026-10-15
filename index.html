@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawn Shop Mahoe - Sistema Integral</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Trebuchet+MS&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #120913;
+            --panel-magenta: #d81e5b;
+            --box-gray: #e2e8e9;
+            --black-border: #000000;
+            --btn-yellow: #facc15;
+            --btn-green: #4ade80;
+            --text-dark: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Trebuchet MS', 'Arial Black', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(var(--panel-magenta) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .rpg-panel {
+            background-color: var(--panel-magenta);
+            border: 3px solid var(--black-border);
+            box-shadow: 6px 6px 0px var(--black-border);
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .rpg-box {
+            background-color: var(--box-gray);
+            border: 2px solid var(--black-border);
+            box-shadow: 3px 3px 0px var(--black-border);
+            border-radius: 12px;
+            color: var(--text-dark);
+            padding: 15px;
+        }
+
+        .panel-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid rgba(0,0,0,0.2);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 0px var(--black-border);
+        }
+
+        .rpg-btn {
+            background-color: var(--box-gray);
+            border: 2px solid var(--black-border);
+            box-shadow: 3px 3px 0px var(--black-border);
+            border-radius: 10px;
+            color: var(--text-dark);
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .rpg-btn:hover {
+            background-color: #ffffff;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px var(--black-border);
+        }
+
+        .rpg-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--black-border);
+        }
+
+        .rpg-btn-yellow { background-color: var(--btn-yellow); }
+        .rpg-btn-yellow:hover { background-color: #fde047; }
+        .rpg-btn-green { background-color: var(--btn-green); }
+        .rpg-btn-green:hover { background-color: #34d399; }
+        .rpg-btn-red { background-color: #fecdd3; color: #881337; }
+        .rpg-btn-red:hover { background-color: #ffe4e6; }
+
+        .rpg-btn-dark {
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid var(--black-border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--black-border);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.75rem;
+        }
+
+        .rpg-btn-dark:hover { background-color: #222222; }
+
+        .tab-btn {
+            background-color: var(--box-gray);
+            border: 3px solid var(--black-border);
+            box-shadow: 4px 4px 0px var(--black-border);
+            border-radius: 12px 12px 0 0;
+            color: #000;
+            font-weight: 900;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--panel-magenta);
+            color: #ffffff;
+            transform: translateY(-4px);
+            box-shadow: 6px 2px 0px var(--black-border);
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #334155;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid var(--black-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #000000;
+            outline: none;
+        }
+
+        .rarity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .rarity-btn {
+            border: 2px solid var(--black-border);
+            border-radius: 8px;
+            padding: 6px 4px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--black-border);
+            text-align: center;
+        }
+
+        .rarity-comun { background-color: #9ca3af; color: #000; }
+        .rarity-pococomun { background-color: #4ade80; color: #000; }
+        .rarity-raro { background-color: #60a5fa; color: #000; }
+        .rarity-epico { background-color: #c084fc; color: #000; }
+        .rarity-legendario { background-color: #facc15; color: #000; }
+        .rarity-selected { outline: 3px solid #000000; transform: scale(1.03); }
+
+        .total-widget {
+            background-color: #b51448;
+            padding: 20px;
+            border-radius: 18px;
+            border: 3px solid var(--black-border);
+            box-shadow: 6px 6px 0px var(--black-border);
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: #000000;
+            border: 3px solid var(--black-border);
+            border-radius: 14px;
+            padding: 15px;
+            box-shadow: 4px 4px 0px var(--panel-magenta);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .timer-display {
+            background-color: #000000;
+            border: 3px solid var(--black-border);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 4px 4px 0px var(--panel-magenta);
+            font-family: 'Teko', sans-serif;
+            font-size: 5.5rem;
+            color: #4ade80;
+            line-height: 1;
+            text-shadow: 2px 2px 0px #166534;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4ade80;
+            color: #000000;
+            border: 2px solid var(--black-border);
+            box-shadow: 4px 4px 0px var(--black-border);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #a31141; border-radius: 8px; border: 2px solid #000; }
+        ::-webkit-scrollbar-thumb { background: #e2e8e9; border: 2px solid #000; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER GLOBAL -->
+    <header class="py-6 px-4 mb-4 text-center">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
+            <div class="w-12 h-12 rpg-panel flex items-center justify-center text-white text-2xl" style="padding:0;">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <div class="text-left">
+                <h1 class="text-4xl font-teko uppercase text-white tracking-wider leading-none drop-shadow-[2px_2px_0px_#000]">
+                    PAWN SHOP <span class="bg-white text-[#d81e5b] px-2 py-0.5 rounded-md border-2 border-black">MAHOE</span>
+                </h1>
+                <p class="text-xs text-pink-300 font-bold uppercase tracking-widest">Sistema Integral de Gestión & Control</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN DE PESTAÑAS -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap gap-2 border-b-4 border-black">
+            <button onclick="switchTab('tab-calc')" id="btn-tab-calc" class="tab-btn active">
+                <i class="fa-solid fa-cart-shopping"></i> Compramos
+            </button>
+            <button onclick="switchTab('tab-custom')" id="btn-tab-custom" class="tab-btn">
+                <i class="fa-solid fa-tags"></i> Ventas
+            </button>
+            <button onclick="switchTab('tab-notas')" id="btn-tab-notas" class="tab-btn">
+                <i class="fa-solid fa-note-sticky"></i> Notas
+            </button>
+            <button onclick="switchTab('tab-fichaje')" id="btn-tab-fichaje" class="tab-btn">
+                <i class="fa-solid fa-clock"></i> Fichaje
+            </button>
+            <button onclick="switchTab('tab-control')" id="btn-tab-control" class="tab-btn">
+                <i class="fa-solid fa-chart-line"></i> Control
+            </button>
+            <button onclick="switchTab('tab-timer')" id="btn-tab-timer" class="tab-btn">
+                <i class="fa-solid fa-stopwatch"></i> Temporizador
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDOS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+        <!-- PESTAÑA 1: COMPRAMOS -->
+        <div id="tab-calc" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="rpg-panel">
+                        <h2 class="text-2xl font-teko text-white uppercase tracking-wider mb-3 flex items-center gap-2 border-b-2 border-black/30 pb-1">
+                            <i class="fa-solid fa-id-card"></i> Datos de la Transacción (Compra)
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="rpg-box p-3 space-y-2">
+                                <span class="text-xs font-black uppercase text-[#d81e5b] tracking-wider block">● VENDEDOR (CLIENTE)</span>
+                                <div>
+                                    <label class="block text-[11px] font-bold uppercase text-slate-700 mb-1">Nombre completo vendedor</label>
+                                    <input type="text" id="vendedor-nombre" oninput="updateCalcPreview()">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold uppercase text-slate-700 mb-1">Número telefónico vendedor</label>
+                                    <input type="text" id="vendedor-telefono" oninput="updateCalcPreview()">
+                                </div>
+                            </div>
+                            <div class="rpg-box p-3 space-y-2">
+                                <span class="text-xs font-black uppercase text-[#d81e5b] tracking-wider block">● COMPRADOR (EMPLEADO)</span>
+                                <div>
+                                    <label class="block text-[11px] font-bold uppercase text-slate-700 mb-1">Nombre completo comprador</label>
+                                    <input type="text" id="comprador-nombre" oninput="updateCalcPreview()">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold uppercase text-slate-700 mb-1">Rango comprador</label>
+                                    <input type="text" id="comprador-rango" oninput="updateCalcPreview()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rpg-panel">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/30 pb-3 mb-4">
+                            <h2 class="text-2xl font-teko text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-boxes-stacked"></i> Selección de Productos
+                            </h2>
+                            <div class="relative">
+                                <input type="text" id="search-input" onkeyup="filterCalcItems()" placeholder="BUSCAR PRODUCTO..." class="bg-white border-2 border-black rounded-lg pl-3 pr-8 py-1 text-xs font-bold uppercase outline-none w-full sm:w-48">
+                                <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-2 text-slate-600 text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <button id="mode-btn-20" onclick="setPriceMode('20')" class="rpg-btn py-2 text-sm justify-center bg-pink-100">
+                                <i class="fa-solid fa-percent"></i> PRECIO +20%
+                            </button>
+                            <button id="mode-btn-max" onclick="setPriceMode('max')" class="rpg-btn py-2 text-sm justify-center">
+                                <i class="fa-solid fa-bolt text-amber-600"></i> PRECIO MÁXIMO
+                            </button>
+                        </div>
+
+                        <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+                            <button onclick="setCalcFilter('all')" id="filter-all" class="rpg-btn px-3 py-1 text-xs bg-pink-100">TODOS</button>
+                            <button onclick="setCalcFilter('high')" id="filter-high" class="rpg-btn px-3 py-1 text-xs">ESPECIALES ($300 / $350)</button>
+                            <button onclick="setCalcFilter('low')" id="filter-low" class="rpg-btn px-3 py-1 text-xs">ESTÁNDAR ($48 / $56)</button>
+                        </div>
+
+                        <div id="calc-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[360px] overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="total-widget">
+                        <div class="flex items-center justify-between mb-1 text-xs font-bold uppercase text-pink-200">
+                            <span>TOTAL A PAGAR</span>
+                            <span id="calc-selected-badge" class="bg-black text-white px-2 py-0.5 rounded text-[11px] font-bold border border-white">0 OBJETOS</span>
+                        </div>
+                        <div class="text-5xl font-teko font-bold text-white tracking-wider leading-none drop-shadow-[3px_3px_0px_#000]" id="calc-total-display">$0</div>
+                    </div>
+
+                    <div class="rpg-panel">
+                        <div class="flex items-center justify-between border-b-2 border-black/30 pb-2 mb-3">
+                            <h2 class="text-2xl font-teko text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-file-lines"></i> Plantilla Generada
+                            </h2>
+                            <span class="bg-emerald-300 border-2 border-black text-black px-2 py-0.5 rounded text-[10px] font-black uppercase">LISTO</span>
+                        </div>
+
+                        <textarea id="calc-output-text" readonly rows="10" class="w-full rpg-box p-3 font-mono text-xs font-bold outline-none resize-none leading-relaxed"></textarea>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            <button onclick="copyCalcMessage()" class="rpg-btn justify-center bg-white">
+                                <i class="fa-regular fa-copy"></i> Copiar Mensaje
+                            </button>
+                            <button onclick="saveCalcTransaction()" class="rpg-btn rpg-btn-yellow justify-center">
+                                <i class="fa-solid fa-floppy-disk"></i> Registrar Venta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rpg-panel mt-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b-2 border-black/30 pb-3 mb-4">
+                    <h2 class="text-3xl font-teko text-white uppercase tracking-wider flex items-center gap-3">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial de Compras
+                    </h2>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-black border-2 border-white text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2">
+                            <span>TOTAL ACUMULADO:</span>
+                            <span id="calc-history-grand-total" class="text-emerald-400 font-teko text-xl tracking-wider">$0</span>
+                        </div>
+                        <button onclick="clearCalcHistory()" class="rpg-btn rpg-btn-red">
+                            <i class="fa-solid fa-trash-can"></i> Vaciar
+                        </button>
+                    </div>
+                </div>
+                <div id="calc-history-container" class="space-y-3 max-h-[400px] overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 2: VENTAS -->
+        <div id="tab-custom" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="rpg-panel">
+                        <div class="panel-title">
+                            <i class="fa-solid fa-tags"></i> Catálogo de Objetos en Venta
+                        </div>
+
+                        <div class="rpg-box flex justify-between items-center mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-black text-white rounded-lg border-2 border-black flex items-center justify-center text-lg"><i class="fa-solid fa-walkie-talkie"></i></div>
+                                <div>
+                                    <div class="font-black uppercase text-sm">Radios</div>
+                                    <div class="font-teko text-lg text-[#d81e5b] font-bold">$3,500 <span class="text-xs text-slate-500 font-sans">c/u</span></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="changeCustomQty('radios', -1)" class="rpg-btn-dark w-8 h-8">-</button>
+                                <input type="number" id="qty-radios" value="0" readonly class="w-10 text-center font-bold bg-transparent">
+                                <button onclick="changeCustomQty('radios', 1)" class="rpg-btn-dark w-8 h-8">+</button>
+                            </div>
+                        </div>
+
+                        <div class="rpg-box flex justify-between items-center mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-black text-yellow-300 rounded-lg border-2 border-black flex items-center justify-center text-lg"><i class="fa-solid fa-gem"></i></div>
+                                <div>
+                                    <div class="font-black uppercase text-sm">Joyas</div>
+                                    <div class="font-teko text-lg text-[#d81e5b] font-bold">$20,000 <span class="text-xs text-slate-500 font-sans">c/u</span></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="changeCustomQty('joyas', -1)" class="rpg-btn-dark w-8 h-8">-</button>
+                                <input type="number" id="qty-joyas" value="0" readonly class="w-10 text-center font-bold bg-transparent">
+                                <button onclick="changeCustomQty('joyas', 1)" class="rpg-btn-dark w-8 h-8">+</button>
+                            </div>
+                        </div>
+
+                        <div class="rpg-box">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-black text-pink-400 rounded-lg border-2 border-black flex items-center justify-center text-lg"><i class="fa-solid fa-robot"></i></div>
+                                    <div>
+                                        <div class="font-black uppercase text-sm">Funko Pop (Funkos P.)</div>
+                                        <div class="font-teko text-lg text-[#d81e5b] font-bold">Base $15,000 + Rareza</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <button onclick="changeCustomQty('funko', -1)" class="rpg-btn-dark w-8 h-8">-</button>
+                                    <input type="number" id="qty-funko" value="0" readonly class="w-10 text-center font-bold bg-transparent">
+                                    <button onclick="changeCustomQty('funko', 1)" class="rpg-btn-dark w-8 h-8">+</button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-slate-300 pt-2 mt-2">
+                                <label>Seleccionar Rareza del Funko Pop:</label>
+                                <div class="rarity-grid">
+                                    <button type="button" onclick="setFunkoRarity('comun')" id="rarity-btn-comun" class="rarity-btn rarity-comun">Común (+$150)</button>
+                                    <button type="button" onclick="setFunkoRarity('pococomun')" id="rarity-btn-pococomun" class="rarity-btn rarity-pococomun">Poco Común (+$300)</button>
+                                    <button type="button" onclick="setFunkoRarity('raro')" id="rarity-btn-raro" class="rarity-btn rarity-raro">Raro (+$600)</button>
+                                    <button type="button" onclick="setFunkoRarity('epico')" id="rarity-btn-epico" class="rarity-btn rarity-epico">Épico (+$1200)</button>
+                                    <button type="button" onclick="setFunkoRarity('legendario')" id="rarity-btn-legendario" class="rarity-btn rarity-legendario">Legendario (+$2400)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="total-widget">
+                        <div class="flex items-center justify-between text-xs font-bold text-pink-200">
+                            <span>TOTAL A COBRAR</span>
+                            <span id="custom-selected-badge" class="bg-black text-white px-2 py-0.5 rounded text-[11px] font-bold border border-white">0 OBJETOS</span>
+                        </div>
+                        <div class="text-5xl font-teko font-bold text-white tracking-wider leading-none drop-shadow-[3px_3px_0px_#000]" id="custom-total-display">$0</div>
+                    </div>
+
+                    <div class="rpg-panel">
+                        <div class="panel-title justify-between">
+                            <span><i class="fa-solid fa-file-lines"></i> Plantilla Generada</span>
+                            <span class="bg-emerald-300 border-2 border-black text-black text-xs px-2 py-0.5 rounded">LISTO</span>
+                        </div>
+                        <textarea id="custom-output-text" readonly rows="8" class="w-full rpg-box p-3 font-mono text-xs font-bold outline-none resize-none leading-relaxed"></textarea>
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <button onclick="copyCustomMessage()" class="rpg-btn justify-center bg-white"><i class="fa-regular fa-copy"></i> Copiar Mensaje</button>
+                            <button onclick="saveCustomTransaction()" class="rpg-btn rpg-btn-yellow justify-center"><i class="fa-solid fa-floppy-disk"></i> Registrar Venta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rpg-panel mt-8">
+                <div class="flex justify-between items-center border-b-2 border-black/30 pb-3 mb-4 flex-wrap gap-2">
+                    <h2 class="text-3xl font-teko text-white uppercase"><i class="fa-solid fa-clock-rotate-left"></i> Historial de Ventas</h2>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-black border-2 border-white text-white px-3 py-1.5 rounded-lg text-xs font-bold">
+                            TOTAL: <span id="custom-history-grand-total" class="text-emerald-400 font-teko text-xl">$0</span>
+                        </div>
+                        <button onclick="clearCustomHistory()" class="rpg-btn rpg-btn-red"><i class="fa-solid fa-trash-can"></i> Vaciar</button>
+                    </div>
+                </div>
+                <div id="custom-history-container" class="space-y-3 max-h-[400px] overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 3: BLOC DE NOTAS CON LISTADO ABAJO -->
+        <div id="tab-notas" class="tab-content hidden">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- FORMULARIO NUEVA NOTA -->
+                <div class="rpg-panel">
+                    <div class="panel-title justify-between items-center flex-wrap gap-2">
+                        <span><i class="fa-solid fa-note-sticky"></i> Bloc de Notas General</span>
+                        <button onclick="createNewNote()" class="rpg-btn rpg-btn-yellow text-xs py-1.5 px-3">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Nota
+                        </button>
+                    </div>
+
+                    <div class="rpg-box space-y-3">
+                        <div>
+                            <label>Título de la nota (Opcional):</label>
+                            <input type="text" id="note-title-input" placeholder="Ej. Recordatorio turno noche / Pedido urgente" class="mt-1">
+                        </div>
+                        <div>
+                            <label>Contenido de la nota:</label>
+                            <textarea id="note-content-input" rows="6" class="w-full font-sans text-sm font-bold p-3 outline-none resize-y mt-1" placeholder="Escribe tu nota aquí..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LISTADO DE NOTAS GUARDADAS ABAJO -->
+                <div class="rpg-panel">
+                    <div class="flex justify-between items-center border-b-2 border-black/30 pb-3 mb-4 flex-wrap gap-2">
+                        <h2 class="text-3xl font-teko text-white uppercase"><i class="fa-solid fa-folder-open"></i> Notas Guardadas</h2>
+                        <button onclick="clearAllNotes()" class="rpg-btn rpg-btn-red text-xs py-1 px-3"><i class="fa-solid fa-trash-can"></i> Vaciar Notas</button>
+                    </div>
+                    <div id="saved-notes-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 4: FICHAJE -->
+        <div id="tab-fichaje" class="tab-content hidden">
+            <div class="max-w-2xl mx-auto space-y-6">
+                <div class="rpg-panel">
+                    <div class="panel-title justify-between items-center flex-wrap gap-2">
+                        <span><i class="fa-solid fa-clipboard-user"></i> Control de Fichaje Semanal</span>
+                        <div class="text-xs bg-black text-white px-3 py-1 rounded border border-white">
+                            HORAS SEMANALES: <span id="fichaje-weekly-total" class="text-emerald-400 font-teko text-lg">0h 0min</span>
+                        </div>
+                    </div>
+
+                    <div class="rpg-box space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label><i class="fa-regular fa-calendar-days"></i> Día de la semana</label>
+                                <select id="fichaje-dia" class="mt-1">
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miércoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sábado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label><i class="fa-solid fa-calendar-week"></i> Semana (Rango y Mes)</label>
+                                <div class="grid grid-cols-4 gap-1 mt-1">
+                                    <input type="number" id="fichaje-dia-ini" min="1" max="31" placeholder="Del" class="text-center px-1" oninput="updateSemanaIdentificador()">
+                                    <input type="number" id="fichaje-dia-fin" min="1" max="31" placeholder="Al" class="text-center px-1" oninput="updateSemanaIdentificador()">
+                                    <select id="fichaje-mes" class="text-xs px-1" onchange="updateSemanaIdentificador()">
+                                        <option value="Enero">Ene</option>
+                                        <option value="Febrero">Feb</option>
+                                        <option value="Marzo">Mar</option>
+                                        <option value="Abril">Abr</option>
+                                        <option value="Mayo">May</option>
+                                        <option value="Junio">Jun</option>
+                                        <option value="Julio">Jul</option>
+                                        <option value="Agosto">Ago</option>
+                                        <option value="Septiembre">Sep</option>
+                                        <option value="Octubre" selected>Oct</option>
+                                        <option value="Noviembre">Nov</option>
+                                        <option value="Diciembre">Dic</option>
+                                    </select>
+                                    <input type="number" id="fichaje-anio" value="2026" class="text-center px-1" oninput="updateSemanaIdentificador()">
+                                </div>
+                                <input type="hidden" id="fichaje-semana" oninput="renderFichajeHistory()">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label>Hora de entrada:</label>
+                                <input type="time" id="fichaje-entrada" onchange="calculateTime()" class="mt-1">
+                            </div>
+                            <div>
+                                <label>Hora de salida:</label>
+                                <input type="time" id="fichaje-salida" onchange="calculateTime()" class="mt-1">
+                            </div>
+                        </div>
+
+                        <div class="bg-black text-white p-3 rounded-xl border-2 border-black flex justify-between items-center">
+                            <span class="text-xs uppercase font-bold text-pink-300">Horas trabajadas (Sesión):</span>
+                            <span id="fichaje-session-hours" class="font-teko text-2xl text-emerald-400">0h 0min</span>
+                        </div>
+
+                        <button onclick="saveFichajeEntry()" class="rpg-btn rpg-btn-yellow w-full justify-center py-3">
+                            <i class="fa-solid fa-floppy-disk"></i> Registrar Fichaje
+                        </button>
+                    </div>
+                </div>
+
+                <div class="rpg-panel">
+                    <div class="flex justify-between items-center border-b-2 border-black/30 pb-2 mb-3">
+                        <h3 class="text-xl font-teko text-white uppercase"><i class="fa-solid fa-clock-rotate-left"></i> Registros de Fichaje</h3>
+                        <button onclick="clearFichajeHistory()" class="rpg-btn rpg-btn-red py-1 text-xs"><i class="fa-solid fa-trash-can"></i> Vaciar Fichajes</button>
+                    </div>
+                    <div id="fichaje-history-container" class="space-y-2 max-h-[300px] overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 5: CONTROL -->
+        <div id="tab-control" class="tab-content hidden space-y-6">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400 uppercase">
+                        <span>Balance Total</span>
+                        <button onclick="setBaseBalancePrompt()" class="rpg-btn-dark text-[10px] py-0.5 px-2"><i class="fa-solid fa-pen"></i> Cambiar Base</button>
+                    </div>
+                    <div class="text-5xl font-teko font-bold text-white my-1" id="ctrl-display-balance">$0</div>
+                    <div class="flex justify-between text-xs text-slate-400 font-bold">
+                        <span>BASE: <span id="ctrl-display-base">$0</span></span>
+                        <span id="ctrl-display-status">ESTABLE</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400 uppercase">
+                        <span>Total Ventas (+)</span>
+                        <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>
+                    </div>
+                    <div class="text-5xl font-teko font-bold text-emerald-400 my-1" id="ctrl-display-sales">$0</div>
+                    <div class="text-xs text-slate-400 font-bold">ITEMS VENDIDOS: <span id="ctrl-count-sales">0</span></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex justify-between items-center text-xs font-bold text-pink-400 uppercase">
+                        <span>Total Compras (-)</span>
+                        <i class="fa-solid fa-arrow-trend-down text-rose-500"></i>
+                    </div>
+                    <div class="text-5xl font-teko font-bold text-rose-500 my-1" id="ctrl-display-purchases">$0</div>
+                    <div class="text-xs text-slate-400 font-bold">ITEMS COMPRADOS: <span id="ctrl-count-purchases">0</span></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5">
+                    <div class="rpg-panel">
+                        <div class="panel-title"><i class="fa-solid fa-plus-circle"></i> Registrar Movimiento</div>
+
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button id="ctrl-type-venta" onclick="selectCtrlType('venta')" class="rpg-btn justify-center bg-emerald-200 text-emerald-900 border-2 border-black font-black">
+                                <i class="fa-solid fa-cart-plus"></i> Venta
+                            </button>
+                            <button id="ctrl-type-compra" onclick="selectCtrlType('compra')" class="rpg-btn justify-center bg-rose-200 text-rose-900 border-2 border-black font-black opacity-50">
+                                <i class="fa-solid fa-bag-shopping"></i> Compra
+                            </button>
+                        </div>
+
+                        <div class="rpg-box space-y-3">
+                            <div>
+                                <label><i class="fa-regular fa-calendar-days"></i> Día</label>
+                                <div class="flex gap-2">
+                                    <input type="date" id="ctrl-input-date">
+                                    <button onclick="setCtrlCurrentDate()" class="rpg-btn-dark" title="Hoy"><i class="fa-solid fa-bolt"></i></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label><i class="fa-solid fa-box"></i> Producto / Concepto</label>
+                                <input type="text" id="ctrl-input-product" placeholder="Ej. Lote">
+                            </div>
+                            <div>
+                                <label><i class="fa-solid fa-dollar-sign"></i> Precio ($)</label>
+                                <input type="number" id="ctrl-input-price" step="1" min="0" placeholder="0">
+                            </div>
+
+                            <button onclick="addCtrlTransaction()" class="rpg-btn rpg-btn-yellow w-full justify-center mt-2 py-3">
+                                <i class="fa-solid fa-floppy-disk"></i> Registrar Transacción
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="rpg-panel">
+                        <div class="panel-title justify-between flex-wrap gap-2">
+                            <span><i class="fa-solid fa-list-check"></i> Historial de Movimientos</span>
+                            <span id="ctrl-history-count" class="text-xs bg-black text-white px-2 py-1 rounded">0 Registros</span>
+                        </div>
+
+                        <div class="flex gap-2 mb-4 flex-wrap">
+                            <button onclick="setCtrlFilter('all')" id="ctrl-filter-all" class="rpg-btn px-3 py-1 text-xs bg-pink-100">Todos</button>
+                            <button onclick="setCtrlFilter('venta')" id="ctrl-filter-venta" class="rpg-btn px-3 py-1 text-xs">Sólo Ventas</button>
+                            <button onclick="setCtrlFilter('compra')" id="ctrl-filter-compra" class="rpg-btn px-3 py-1 text-xs">Sólo Compras</button>
+                            <input type="text" id="ctrl-input-search" onkeyup="renderCtrlHistory()" placeholder="Buscar..." class="w-36 ml-auto text-xs py-1 px-2">
+                        </div>
+
+                        <div id="ctrl-history-container" class="space-y-3 max-h-[420px] overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 6: TEMPORIZADOR -->
+        <div id="tab-timer" class="tab-content hidden">
+            <div class="max-w-md mx-auto">
+                <div class="rpg-panel text-center">
+                    <div class="panel-title justify-center">
+                        <i class="fa-solid fa-stopwatch"></i> Cuenta Atrás / Temporizador
+                    </div>
+
+                    <div class="rpg-box space-y-4">
+                        <div class="timer-display" id="timer-display">00:05:00</div>
+
+                        <div class="grid grid-cols-3 gap-2" id="timer-inputs-container">
+                            <div>
+                                <label>Horas</label>
+                                <input type="number" id="input-hours" min="0" value="0" class="text-center font-teko text-2xl">
+                            </div>
+                            <div>
+                                <label>Minutos</label>
+                                <input type="number" id="input-minutes" min="0" max="59" value="5" class="text-center font-teko text-2xl">
+                            </div>
+                            <div>
+                                <label>Segundos</label>
+                                <input type="number" id="input-seconds" min="0" max="59" value="0" class="text-center font-teko text-2xl">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="startTimer()" id="btn-start" class="rpg-btn rpg-btn-green justify-center"><i class="fa-solid fa-play"></i> Iniciar</button>
+                            <button onclick="pauseTimer()" id="btn-pause" class="rpg-btn rpg-btn-yellow justify-center" disabled style="opacity:0.5;"><i class="fa-solid fa-pause"></i> Pausar</button>
+                            <button onclick="resetTimer()" class="rpg-btn rpg-btn-red justify-center"><i class="fa-solid fa-rotate-right"></i> Reiniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-message">¡Notificación!</span>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            document.getElementById("toast-message").innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        // ==========================================
+        // 1. CALCULADORA (COMPRAMOS)
+        // ==========================================
+        const calcItems = [
+            { id: 'trofeo-caza', name: 'Trofeo Caza', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'cuadro-medieval', name: 'Cuadro medieval', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'anillo-oro-diamante', name: 'Anillo Oro y Diamante', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'anillo-ruby', name: 'Anillo de ruby', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'caliz-oro', name: 'Caliz de Oro', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'elefante-ruby', name: 'Elefante ruby', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'cuadro-antiguo', name: 'Cuadro Antiguo', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'collar-oro', name: 'Collar Oro', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'estatua-dorada', name: 'Estatua Dorada', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'pendiente-sagrada', name: 'Pendiente Sagrada', price20: 300, priceMax: 350, tier: 'high' },
+            { id: 'chaleco-salvavidas', name: 'Chaleco Salva Vidas', price20: 48, priceMax: 56, tier: 'low' },
+            { id: 'caja-registradora', name: 'Caja Registradora', price20: 48, priceMax: 56, tier: 'low' },
+            { id: 'maquina-tatuar', name: 'Maquina de Tatuar', price20: 48, priceMax: 56, tier: 'low' },
+            { id: 'tijeras-peluquero', name: 'Tijeras de Peluquero', price20: 48, priceMax: 56, tier: 'low' }
+        ];
+
+        let calcPriceMode = '20';
+        let calcFilter = 'all';
+        const calcQuantities = {};
+        let calcHistoryData = [];
+
+        calcItems.forEach(i => calcQuantities[i.id] = 0);
+
+        function setPriceMode(mode) {
+            calcPriceMode = mode;
+            document.getElementById('mode-btn-20').classList.toggle('bg-pink-100', mode === '20');
+            document.getElementById('mode-btn-max').classList.toggle('bg-pink-100', mode === 'max');
+            renderCalcItems();
+            updateCalcPreview();
+        }
+
+        function setCalcFilter(f) {
+            calcFilter = f;
+            document.querySelectorAll('#filter-all, #filter-high, #filter-low').forEach(b => b.classList.remove('bg-pink-100'));
+            document.getElementById(`filter-${f}`).classList.add('bg-pink-100');
+            renderCalcItems();
+        }
+
+        function filterCalcItems() { renderCalcItems(); }
+
+        function renderCalcItems() {
+            const container = document.getElementById('calc-items-grid');
+            container.innerHTML = '';
+            const search = document.getElementById('search-input').value.toLowerCase();
+
+            calcItems.forEach(item => {
+                if (calcFilter !== 'all' && item.tier !== calcFilter) return;
+                if (search && !item.name.toLowerCase().includes(search)) return;
+
+                const qty = calcQuantities[item.id];
+                const price = calcPriceMode === '20' ? item.price20 : item.priceMax;
+
+                const card = document.createElement('div');
+                card.className = `rpg-box p-3 flex items-center justify-between gap-2 ${qty > 0 ? 'bg-white' : ''}`;
+                card.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs font-black uppercase truncate">${item.name}</div>
+                        <div class="text-sm font-teko font-bold text-[#d81e5b] leading-none">$${Math.round(price).toLocaleString()} <span class="text-[10px] font-sans text-slate-500">(${calcPriceMode === '20' ? '+20%' : 'MÁX'})</span></div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="changeCalcQty('${item.id}', -1)" class="rpg-btn-dark w-7 h-7">-</button>
+                        <input type="number" min="0" value="${qty}" onchange="setCalcQty('${item.id}', this.value)" class="w-8 text-center text-xs font-bold bg-transparent">
+                        <button onclick="changeCalcQty('${item.id}', 1)" class="rpg-btn-dark w-7 h-7">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function changeCalcQty(id, delta) {
+            calcQuantities[id] = Math.max(0, (calcQuantities[id] || 0) + delta);
+            renderCalcItems();
+            updateCalcPreview();
+        }
+
+        function setCalcQty(id, val) {
+            calcQuantities[id] = Math.max(0, parseInt(val) || 0);
+            renderCalcItems();
+            updateCalcPreview();
+        }
+
+        function getCalcDetails() {
+            const vendedorNombre = document.getElementById('vendedor-nombre').value.trim();
+            const vendedorTelefono = document.getElementById('vendedor-telefono').value.trim();
+            const compradorNombre = document.getElementById('comprador-nombre').value.trim();
+            const compradorRango = document.getElementById('comprador-rango').value.trim();
+
+            const selected = [];
+            let total = 0, totalObj = 0;
+
+            calcItems.forEach(item => {
+                const qty = calcQuantities[item.id];
+                if (qty > 0) {
+                    const price = calcPriceMode === '20' ? item.price20 : item.priceMax;
+                    const subtotal = qty * price;
+                    total += subtotal;
+                    totalObj += qty;
+                    selected.push({ name: item.name, qty, subtotal: Math.round(subtotal) });
+                }
+            });
+
+            const roundedTotal = Math.round(total);
+            let precioTxt = "Total: 0$", objTxt = "";
+            if (selected.length > 0) {
+                precioTxt = `${selected.map(i => `x${i.qty}${i.name} = ${i.subtotal}$`).join(' | ')} | Total: ${roundedTotal}$`;
+                objTxt = selected.map(i => `x${i.qty} ${i.name}`).join(' | ');
+            }
+
+            const template = `- Nombre completo vendedor: ${vendedorNombre}
+- Número telefónico vendedor: ${vendedorTelefono}
+
+- Nombre completo comprador: ${compradorNombre}
+- Rango comprador: ${compradorRango}
+
+- Precio acordado del objeto: ${precioTxt}
+- Objeto comprado + foto: ${objTxt}`;
+
+            return { vendedorNombre, compradorNombre, total: roundedTotal, totalObj, template };
+        }
+
+        function updateCalcPreview() {
+            const d = getCalcDetails();
+            document.getElementById('calc-output-text').value = d.template;
+            document.getElementById('calc-total-display').innerText = `$${d.total.toLocaleString()}`;
+            document.getElementById('calc-selected-badge').innerText = `${d.totalObj} OBJETOS`;
+        }
+
+        function copyCalcMessage() {
+            const t = document.getElementById("calc-output-text");
+            t.select();
+            document.execCommand('copy');
+            saveCalcTransaction();
+            showToast("¡Plantilla copiada y registrada!");
+        }
+
+        function saveCalcTransaction() {
+            const d = getCalcDetails();
+            if (d.totalObj === 0) { showToast("Selecciona al menos 1 producto"); return; }
+
+            const rec = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+                vendedor: d.vendedorNombre || 'Sin Nombre',
+                comprador: d.compradorNombre || 'Sin Nombre',
+                total: d.total,
+                itemsCount: d.totalObj,
+                text: d.template
+            };
+
+            calcHistoryData.unshift(rec);
+            localStorage.setItem('mahoe_calc_history', JSON.stringify(calcHistoryData));
+            renderCalcHistory();
+            showToast("Compra registrada");
+        }
+
+        function toggleCalcDetail(id) {
+            const el = document.getElementById(`calc-detail-${id}`);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function renderCalcHistory() {
+            const container = document.getElementById('calc-history-container');
+            container.innerHTML = '';
+            let grandTotal = 0;
+
+            if (calcHistoryData.length === 0) {
+                container.innerHTML = `<div class="rpg-box text-center text-slate-500 font-bold text-xs">Sin registros de compras.</div>`;
+                document.getElementById('calc-history-grand-total').innerText = '$0';
+                return;
+            }
+
+            calcHistoryData.forEach((rec, idx) => {
+                grandTotal += rec.total;
+                const card = document.createElement('div');
+                card.className = "rpg-box p-3 bg-white space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center gap-2 flex-wrap">
+                        <div>
+                            <div class="flex gap-2 items-center flex-wrap mb-1">
+                                <span class="bg-black text-white text-[10px] px-2 py-0.5 rounded">#${calcHistoryData.length - idx}</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-regular fa-clock"></i> ${rec.timestamp}</span>
+                                <span class="bg-emerald-100 text-emerald-900 font-black text-xs px-2 py-0.5 rounded border border-emerald-400">$${Math.round(rec.total).toLocaleString()}</span>
+                                <span class="bg-pink-100 text-pink-900 font-bold text-xs px-2 py-0.5 rounded">${rec.itemsCount} Objetos</span>
+                            </div>
+                            <div class="text-xs font-bold text-black"><span class="text-[#d81e5b]">Vendedor:</span> ${rec.vendedor} | <span class="text-[#d81e5b]">Comprador:</span> ${rec.comprador}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleCalcDetail(${rec.id})" class="rpg-btn py-1 px-2 text-xs bg-cyan-100"><i class="fa-solid fa-eye"></i> Detalle</button>
+                            <button onclick="copyCalcHistoryItem(${rec.id})" class="rpg-btn py-1 px-2 text-xs"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            <button onclick="deleteCalcHistoryItem(${rec.id})" class="rpg-btn-dark py-1 px-2 text-xs bg-rose-700"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    <div id="calc-detail-${rec.id}" class="hidden border-t border-slate-300 pt-2">
+                        <textarea readonly rows="5" class="w-full font-mono text-xs font-bold p-2 bg-slate-50 border rounded resize-none">${rec.text}</textarea>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            document.getElementById('calc-history-grand-total').innerText = `$${Math.round(grandTotal).toLocaleString()}`;
+        }
+
+        function copyCalcHistoryItem(id) {
+            const r = calcHistoryData.find(i => i.id === id);
+            if (!r) return;
+            navigator.clipboard.writeText(r.text);
+            showToast("¡Compra copiada!");
+        }
+
+        function deleteCalcHistoryItem(id) {
+            calcHistoryData = calcHistoryData.filter(i => i.id !== id);
+            localStorage.setItem('mahoe_calc_history', JSON.stringify(calcHistoryData));
+            renderCalcHistory();
+            showToast("Registro eliminado");
+        }
+
+        function clearCalcHistory() {
+            if (confirm("¿Vaciar todo el historial de compras?")) {
+                calcHistoryData = [];
+                localStorage.removeItem('mahoe_calc_history');
+                renderCalcHistory();
+                showToast("Historial vaciado");
+            }
+        }
+
+        // ==========================================
+        // 2. OBJETOS (VENTAS)
+        // ==========================================
+        const customPrices = { radios: 3500, joyas: 20000, funkoBase: 15000 };
+        const customRarityAddons = {
+            comun: { name: 'Común', price: 150 },
+            pococomun: { name: 'Poco Común', price: 300 },
+            raro: { name: 'Raro', price: 600 },
+            epico: { name: 'Épico', price: 1200 },
+            legendario: { name: 'Legendario', price: 2400 }
+        };
+
+        let customQty = { radios: 0, joyas: 0, funko: 0 };
+        let selectedFunkoRarity = 'comun';
+        let customHistoryData = [];
+
+        function setFunkoRarity(r) {
+            selectedFunkoRarity = r;
+            Object.keys(customRarityAddons).forEach(k => {
+                document.getElementById(`rarity-btn-${k}`).classList.toggle('rarity-selected', k === r);
+            });
+            updateCustomPreview();
+        }
+
+        function changeCustomQty(key, delta) {
+            customQty[key] = Math.max(0, customQty[key] + delta);
+            document.getElementById(`qty-${key}`).value = customQty[key];
+            updateCustomPreview();
+        }
+
+        function getCustomDetails() {
+            const active = [];
+            let total = 0, totalObj = 0;
+
+            if (customQty.radios > 0) {
+                const sub = customQty.radios * customPrices.radios;
+                total += sub; totalObj += customQty.radios;
+                active.push({ agreed: `x${customQty.radios} Radios = ${Math.round(sub)}$`, bought: `x${customQty.radios} Radios` });
+            }
+            if (customQty.joyas > 0) {
+                const sub = customQty.joyas * customPrices.joyas;
+                total += sub; totalObj += customQty.joyas;
+                active.push({ agreed: `x${customQty.joyas} Joyas = ${Math.round(sub)}$`, bought: `x${customQty.joyas} Joyas` });
+            }
+            if (customQty.funko > 0) {
+                const unitPrice = customPrices.funkoBase + customRarityAddons[selectedFunkoRarity].price;
+                const sub = customQty.funko * unitPrice;
+                const rarityLabel = customRarityAddons[selectedFunkoRarity].name;
+                total += sub; totalObj += customQty.funko;
+                active.push({ agreed: `x${customQty.funko} Funko Pop (${rarityLabel}) = ${Math.round(sub)}$`, bought: `x${customQty.funko} Funko Pop (${rarityLabel})` });
+            }
+
+            const roundedTotal = Math.round(total);
+            let precioTxt = "Total: 0$", objTxt = "";
+            if (active.length > 0) {
+                precioTxt = `${active.map(i => i.agreed).join(' | ')} | Total: ${roundedTotal}$`;
+                objTxt = active.map(i => i.bought).join(' | ');
+            }
+
+            let template = `- Precio acordado del objeto: ${precioTxt}\n- Objeto comprado + foto: ${objTxt}`;
+            return { total: roundedTotal, totalObj, template };
+        }
+
+        function updateCustomPreview() {
+            const d = getCustomDetails();
+            document.getElementById('custom-output-text').value = d.template;
+            document.getElementById('custom-total-display').innerText = `$${d.total.toLocaleString()}`;
+            document.getElementById('custom-selected-badge').innerText = `${d.totalObj} OBJETOS`;
+        }
+
+        function copyCustomMessage() {
+            const t = document.getElementById("custom-output-text");
+            t.select();
+            document.execCommand('copy');
+            saveCustomTransaction();
+            showToast("¡Venta copiada y registrada!");
+        }
+
+        function saveCustomTransaction() {
+            const d = getCustomDetails();
+            if (d.totalObj === 0) { showToast("Selecciona al menos 1 producto"); return; }
+
+            const rec = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+                total: d.total,
+                itemsCount: d.totalObj,
+                text: d.template
+            };
+
+            customHistoryData.unshift(rec);
+            localStorage.setItem('mahoe_custom_pawn_history', JSON.stringify(customHistoryData));
+            renderCustomHistory();
+            showToast("Venta registrada");
+        }
+
+        function toggleCustomDetail(id) {
+            const el = document.getElementById(`custom-detail-${id}`);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function renderCustomHistory() {
+            const container = document.getElementById('custom-history-container');
+            container.innerHTML = '';
+            let grandTotal = 0;
+
+            if (customHistoryData.length === 0) {
+                container.innerHTML = `<div class="rpg-box text-center text-slate-500 font-bold text-xs">Sin ventas registradas.</div>`;
+                document.getElementById('custom-history-grand-total').innerText = '$0';
+                return;
+            }
+
+            customHistoryData.forEach((rec, idx) => {
+                grandTotal += rec.total;
+                const card = document.createElement('div');
+                card.className = "rpg-box p-3 bg-white space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center gap-2 flex-wrap">
+                        <div>
+                            <div class="flex gap-2 items-center flex-wrap mb-1">
+                                <span class="bg-black text-white text-[10px] px-2 py-0.5 rounded">#${customHistoryData.length - idx}</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-regular fa-clock"></i> ${rec.timestamp}</span>
+                                <span class="bg-emerald-100 text-emerald-900 font-black text-xs px-2 py-0.5 rounded border border-emerald-400">$${Math.round(rec.total).toLocaleString()}</span>
+                                <span class="bg-pink-100 text-pink-900 font-bold text-xs px-2 py-0.5 rounded">${rec.itemsCount} Objetos</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleCustomDetail(${rec.id})" class="rpg-btn py-1 px-2 text-xs bg-cyan-100"><i class="fa-solid fa-eye"></i> Detalle</button>
+                            <button onclick="copyCustomHistoryItem(${rec.id})" class="rpg-btn py-1 px-2 text-xs"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            <button onclick="deleteCustomHistoryItem(${rec.id})" class="rpg-btn-dark py-1 px-2 text-xs bg-rose-700"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    <div id="custom-detail-${rec.id}" class="hidden border-t border-slate-300 pt-2">
+                        <textarea readonly rows="4" class="w-full font-mono text-xs font-bold p-2 bg-slate-50 border rounded resize-none">${rec.text}</textarea>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            document.getElementById('custom-history-grand-total').innerText = `$${Math.round(grandTotal).toLocaleString()}`;
+        }
+
+        function copyCustomHistoryItem(id) {
+            const r = customHistoryData.find(i => i.id === id);
+            if (!r) return;
+            navigator.clipboard.writeText(r.text);
+            showToast("¡Venta copiada!");
+        }
+
+        function deleteCustomHistoryItem(id) {
+            customHistoryData = customHistoryData.filter(i => i.id !== id);
+            localStorage.setItem('mahoe_custom_pawn_history', JSON.stringify(customHistoryData));
+            renderCustomHistory();
+            showToast("Registro eliminado");
+        }
+
+        function clearCustomHistory() {
+            if (confirm("¿Vaciar todo el historial de ventas?")) {
+                customHistoryData = [];
+                localStorage.removeItem('mahoe_custom_pawn_history');
+                renderCustomHistory();
+                showToast("Historial vaciado");
+            }
+        }
+
+        // ==========================================
+        // 3. BLOC DE NOTAS GENERAL
+        // ==========================================
+        let notesList = [];
+
+        function createNewNote() {
+            const titleInput = document.getElementById('note-title-input').value.trim();
+            const contentInput = document.getElementById('note-content-input').value.trim();
+
+            if (!contentInput) {
+                showToast("Escribe algo en la nota antes de guardar");
+                return;
+            }
+
+            const newNote = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+                title: titleInput || 'Nota sin título',
+                content: contentInput
+            };
+
+            notesList.unshift(newNote);
+            localStorage.setItem('mahoe_notes_list', JSON.stringify(notesList));
+
+            document.getElementById('note-title-input').value = '';
+            document.getElementById('note-content-input').value = '';
+
+            renderNotesList();
+            showToast("¡Nota guardada abajo!");
+        }
+
+        function toggleNoteContent(id) {
+            const el = document.getElementById(`note-body-${id}`);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function copyNoteText(id) {
+            const note = notesList.find(n => n.id === id);
+            if (note) {
+                navigator.clipboard.writeText(`${note.title}\n${note.content}`);
+                showToast("¡Nota copiada al portapapeles!");
+            }
+        }
+
+        function deleteNoteItem(id) {
+            notesList = notesList.filter(n => n.id !== id);
+            localStorage.setItem('mahoe_notes_list', JSON.stringify(notesList));
+            renderNotesList();
+            showToast("Nota eliminada");
+        }
+
+        function clearAllNotes() {
+            if (confirm("¿Seguro que deseas eliminar todas las notas guardadas?")) {
+                notesList = [];
+                localStorage.removeItem('mahoe_notes_list');
+                renderNotesList();
+                showToast("Notas vaciadas");
+            }
+        }
+
+        function renderNotesList() {
+            const container = document.getElementById('saved-notes-list');
+            container.innerHTML = '';
+
+            if (notesList.length === 0) {
+                container.innerHTML = `<div class="rpg-box text-center text-slate-500 font-bold text-xs">No hay notas guardadas todavía. Escribe arriba y pulsa Guardar.</div>`;
+                return;
+            }
+
+            notesList.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "rpg-box p-3 bg-white space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center gap-2 flex-wrap cursor-pointer" onclick="toggleNoteContent(${n.id})">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500 font-bold"><i class="fa-regular fa-clock"></i> ${n.timestamp}</span>
+                            <span class="font-black text-sm uppercase text-[#d81e5b]"><i class="fa-solid fa-note-sticky"></i> ${n.title}</span>
+                        </div>
+                        <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+                            <button onclick="toggleNoteContent(${n.id})" class="rpg-btn py-1 px-2 text-xs bg-cyan-100"><i class="fa-solid fa-eye"></i> Ver Nota</button>
+                            <button onclick="copyNoteText(${n.id})" class="rpg-btn py-1 px-2 text-xs"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            <button onclick="deleteNoteItem(${n.id})" class="rpg-btn-dark py-1 px-2 text-xs bg-rose-700"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                    <div id="note-body-${n.id}" class="hidden border-t border-slate-300 pt-2">
+                        <div class="whitespace-pre-wrap font-sans text-xs font-bold text-slate-800 bg-slate-50 p-3 rounded-lg border border-black/20">${n.content}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // 4. FICHAJE SEMANAL
+        // ==========================================
+        let fichajeHistory = [];
+
+        function updateSemanaIdentificador() {
+            const dIni = document.getElementById('fichaje-dia-ini').value || '12';
+            const dFin = document.getElementById('fichaje-dia-fin').value || '18';
+            const mes = document.getElementById('fichaje-mes').value;
+            const anio = document.getElementById('fichaje-anio').value || '2026';
+            
+            const textoSemana = `${dIni} al ${dFin} de ${mes} (${anio})`;
+            document.getElementById('fichaje-semana').value = textoSemana;
+            renderFichajeHistory();
+        }
+
+        function formatHoursMinutes(totalMinutes) {
+            const h = Math.floor(totalMinutes / 60);
+            const m = totalMinutes % 60;
+            return `${h}h ${m}min`;
+        }
+
+        function calculateTime() {
+            const entrada = document.getElementById('fichaje-entrada').value;
+            const salida = document.getElementById('fichaje-salida').value;
+            if (!entrada || !salida) {
+                document.getElementById('fichaje-session-hours').innerText = "0h 0min";
+                return 0;
+            }
+
+            const [h1, m1] = entrada.split(':').map(Number);
+            const [h2, m2] = salida.split(':').map(Number);
+
+            let minutes1 = h1 * 60 + m1;
+            let minutes2 = h2 * 60 + m2;
+
+            if (minutes2 < minutes1) minutes2 += 24 * 60;
+
+            const diffMinutes = minutes2 - minutes1;
+            document.getElementById('fichaje-session-hours').innerText = formatHoursMinutes(diffMinutes);
+            return diffMinutes;
+        }
+
+        function saveFichajeEntry() {
+            const dia = document.getElementById('fichaje-dia').value;
+            const semana = document.getElementById('fichaje-semana').value.trim() || '12 al 18 de Octubre (2026)';
+            const entrada = document.getElementById('fichaje-entrada').value;
+            const salida = document.getElementById('fichaje-salida').value;
+            const minTrabajados = calculateTime();
+
+            if (!entrada || !salida || minTrabajados <= 0) {
+                showToast("Introduce horas de entrada y salida válidas");
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                semana,
+                dia,
+                entrada,
+                salida,
+                minTrabajados
+            };
+
+            fichajeHistory.unshift(entry);
+            localStorage.setItem('mahoe_fichaje_history', JSON.stringify(fichajeHistory));
+            renderFichajeHistory();
+            showToast("¡Fichaje registrado!");
+        }
+
+        function renderFichajeHistory() {
+            const container = document.getElementById('fichaje-history-container');
+            container.innerHTML = '';
+
+            const semanaActual = document.getElementById('fichaje-semana').value.trim();
+            let weeklyTotalMin = 0;
+
+            if (fichajeHistory.length === 0) {
+                container.innerHTML = `<div class="rpg-box text-center text-slate-500 font-bold text-xs">Sin registros de fichaje.</div>`;
+                document.getElementById('fichaje-weekly-total').innerText = "0h 0min";
+                return;
+            }
+
+            fichajeHistory.forEach(rec => {
+                if (!semanaActual || rec.semana.toLowerCase() === semanaActual.toLowerCase()) {
+                    weeklyTotalMin += rec.minTrabajados;
+                }
+
+                const card = document.createElement('div');
+                card.className = "rpg-box p-2 bg-white flex justify-between items-center text-xs";
+                card.innerHTML = `
+                    <div>
+                        <b>[${rec.semana}] ${rec.dia}</b>: ${rec.entrada} - ${rec.salida} 
+                        <span class="bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded font-bold ml-2">${formatHoursMinutes(rec.minTrabajados)}</span>
+                    </div>
+                    <button onclick="deleteFichajeItem(${rec.id})" class="rpg-btn-dark py-0.5 px-1.5 text-[10px] bg-rose-700"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('fichaje-weekly-total').innerText = formatHoursMinutes(weeklyTotalMin);
+        }
+
+        function deleteFichajeItem(id) {
+            fichajeHistory = fichajeHistory.filter(i => i.id !== id);
+            localStorage.setItem('mahoe_fichaje_history', JSON.stringify(fichajeHistory));
+            renderFichajeHistory();
+            showToast("Fichaje eliminado");
+        }
+
+        function clearFichajeHistory() {
+            if (confirm("¿Vaciar todo el historial de fichajes?")) {
+                fichajeHistory = [];
+                localStorage.removeItem('mahoe_fichaje_history');
+                renderFichajeHistory();
+                showToast("Fichajes vaciados");
+            }
+        }
+
+        // ==========================================
+        // 5. CONTROL VENTAS Y COMPRAS
+        // ==========================================
+        let ctrlType = 'venta';
+        let ctrlFilter = 'all';
+        let ctrlBaseBalance = 0;
+        let ctrlTransactions = [];
+
+        function selectCtrlType(t) {
+            ctrlType = t;
+            document.getElementById('ctrl-type-venta').classList.toggle('opacity-50', t !== 'venta');
+            document.getElementById('ctrl-type-compra').classList.toggle('opacity-50', t !== 'compra');
+        }
+
+        function setCtrlCurrentDate() {
+            document.getElementById('ctrl-input-date').value = new Date().toISOString().split('T')[0];
+        }
+
+        function setBaseBalancePrompt() {
+            const val = prompt("Introduce el Balance Inicial / Base ($):", ctrlBaseBalance);
+            if (val !== null) {
+                const parsed = parseFloat(val);
+                if (!isNaN(parsed)) {
+                    ctrlBaseBalance = Math.round(parsed);
+                    saveCtrlData();
+                    updateCtrlStats();
+                    showToast("Balance base actualizado");
+                }
+            }
+        }
+
+        function addCtrlTransaction() {
+            const dateVal = document.getElementById('ctrl-input-date').value;
+            const productVal = document.getElementById('ctrl-input-product').value.trim();
+            const priceVal = parseFloat(document.getElementById('ctrl-input-price').value);
+
+            if (!dateVal || !productVal || isNaN(priceVal) || priceVal < 0) {
+                showToast("Completa los datos válidos");
+                return;
+            }
+
+            ctrlTransactions.unshift({ id: Date.now(), date: dateVal, type: ctrlType, product: productVal, price: Math.round(priceVal) });
+            saveCtrlData();
+            renderCtrlHistory();
+            updateCtrlStats();
+
+            document.getElementById('ctrl-input-product').value = '';
+            document.getElementById('ctrl-input-price').value = '';
+            showToast("Transacción registrada");
+        }
+
+        function deleteCtrlTransaction(id) {
+            ctrlTransactions = ctrlTransactions.filter(t => t.id !== id);
+            saveCtrlData();
+            renderCtrlHistory();
+            updateCtrlStats();
+            showToast("Registro eliminado");
+        }
+
+        function updateCtrlStats() {
+            let sales = 0, purchases = 0, countSales = 0, countPurchases = 0;
+            ctrlTransactions.forEach(t => {
+                if (t.type === 'venta') { sales += t.price; countSales++; }
+                else { purchases += t.price; countPurchases++; }
+            });
+
+            const balance = ctrlBaseBalance + sales - purchases;
+
+            document.getElementById('ctrl-display-balance').innerText = `$${Math.round(balance).toLocaleString()}`;
+            document.getElementById('ctrl-display-base').innerText = `$${Math.round(ctrlBaseBalance).toLocaleString()}`;
+            document.getElementById('ctrl-display-sales').innerText = `$${Math.round(sales).toLocaleString()}`;
+            document.getElementById('ctrl-display-purchases').innerText = `$${Math.round(purchases).toLocaleString()}`;
+            document.getElementById('ctrl-count-sales').innerText = countSales;
+            document.getElementById('ctrl-count-purchases').innerText = countPurchases;
+
+            const st = document.getElementById('ctrl-display-status');
+            st.innerText = balance < 0 ? "DÉFICIT" : "SUPERÁVIT";
+            st.className = balance < 0 ? "text-rose-500" : "text-emerald-400";
+        }
+
+        function setCtrlFilter(f) {
+            ctrlFilter = f;
+            document.querySelectorAll('#ctrl-filter-all, #ctrl-filter-venta, #ctrl-filter-compra').forEach(b => b.classList.remove('bg-pink-100'));
+            document.getElementById(`ctrl-filter-${f}`).classList.add('bg-pink-100');
+            renderCtrlHistory();
+        }
+
+        function renderCtrlHistory() {
+            const container = document.getElementById('ctrl-history-container');
+            container.innerHTML = '';
+            const search = document.getElementById('ctrl-input-search').value.toLowerCase();
+
+            const filtered = ctrlTransactions.filter(t => {
+                if (ctrlFilter !== 'all' && t.type !== ctrlFilter) return false;
+                if (search && !t.product.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            document.getElementById('ctrl-history-count').innerText = `${filtered.length} Registros`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="rpg-box text-center text-slate-500 font-bold text-xs">Sin registros de movimientos.</div>`;
+                return;
+            }
+
+            filtered.forEach(t => {
+                const card = document.createElement('div');
+                card.className = "rpg-box p-3 bg-white flex justify-between items-center gap-2";
+                card.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded border border-black ${t.type === 'venta' ? 'bg-emerald-400 text-black' : 'bg-rose-500 text-white'}">${t.type}</span>
+                            <span class="text-xs text-slate-500 font-bold"><i class="fa-regular fa-calendar-days"></i> ${t.date}</span>
+                        </div>
+                        <div class="font-black uppercase text-sm text-black">${t.product}</div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="font-teko text-2xl font-bold ${t.type === 'venta' ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${t.type === 'venta' ? '+' : '-'}$${Math.round(t.price).toLocaleString()}
+                        </div>
+                        <button onclick="deleteCtrlTransaction(${t.id})" class="rpg-btn-dark py-1 px-2 bg-rose-600"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function saveCtrlData() {
+            localStorage.setItem('mahoe_transactions', JSON.stringify(ctrlTransactions));
+            localStorage.setItem('mahoe_base_balance', ctrlBaseBalance);
+        }
+
+        function loadCtrlData() {
+            const savedTx = localStorage.getItem('mahoe_transactions');
+            const savedBase = localStorage.getItem('mahoe_base_balance');
+            if (savedTx) try { ctrlTransactions = JSON.parse(savedTx); } catch (e) { ctrlTransactions = []; }
+            if (savedBase) ctrlBaseBalance = parseFloat(savedBase) || 0;
+        }
+
+        // ==========================================
+        // 6. TEMPORIZADOR / CUENTA ATRÁS
+        // ==========================================
+        let timerCountdown;
+        let timerRemainingSeconds = 0;
+        let timerIsRunning = false;
+        let timerAlarmInterval = null;
+
+        function updateTimerDisplay() {
+            const h = Math.floor(timerRemainingSeconds / 3600);
+            const m = Math.floor((timerRemainingSeconds % 3600) / 60);
+            const s = timerRemainingSeconds % 60;
+            document.getElementById('timer-display').innerText = 
+                `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } catch (e) {}
+        }
+
+        function startTimer() {
+            if (!timerIsRunning) {
+                if (timerRemainingSeconds <= 0) {
+                    const h = parseInt(document.getElementById('input-hours').value) || 0;
+                    const m = parseInt(document.getElementById('input-minutes').value) || 0;
+                    const s = parseInt(document.getElementById('input-seconds').value) || 0;
+                    timerRemainingSeconds = (h * 3600) + (m * 60) + s;
+                    if (timerRemainingSeconds <= 0) { showToast("Introduce un tiempo válido"); return; }
+                }
+
+                timerIsRunning = true;
+                document.getElementById('timer-inputs-container').classList.add('hidden');
+                document.getElementById('btn-start').disabled = true;
+                document.getElementById('btn-start').style.opacity = '0.5';
+                document.getElementById('btn-pause').disabled = false;
+                document.getElementById('btn-pause').style.opacity = '1';
+
+                stopTimerAlarm();
+
+                timerCountdown = setInterval(() => {
+                    if (timerRemainingSeconds > 0) {
+                        timerRemainingSeconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerCountdown);
+                        timerIsRunning = false;
+                        triggerTimerAlarm();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (timerIsRunning) {
+                clearInterval(timerCountdown);
+                timerIsRunning = false;
+                document.getElementById('btn-start').disabled = false;
+                document.getElementById('btn-start').style.opacity = '1';
+                document.getElementById('btn-pause').disabled = true;
+                document.getElementById('btn-pause').style.opacity = '0.5';
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerCountdown);
+            stopTimerAlarm();
+            timerIsRunning = false;
+            timerRemainingSeconds = 0;
+
+            document.getElementById('timer-inputs-container').classList.remove('hidden');
+            document.getElementById('btn-start').disabled = false;
+            document.getElementById('btn-start').style.opacity = '1';
+            document.getElementById('btn-pause').disabled = true;
+            document.getElementById('btn-pause').style.opacity = '0.5';
+
+            document.getElementById('input-hours').value = 0;
+            document.getElementById('input-minutes').value = 5;
+            document.getElementById('input-seconds').value = 0;
+
+            updateTimerDisplay();
+            document.getElementById('timer-display').style.color = '#4ade80';
+        }
+
+        function triggerTimerAlarm() {
+            showToast("¡TIEMPO FINALIZADO!");
+            document.getElementById('timer-display').style.color = '#f43f5e';
+            playBeep();
+            timerAlarmInterval = setInterval(playBeep, 600);
+        }
+
+        function stopTimerAlarm() {
+            if (timerAlarmInterval) {
+                clearInterval(timerAlarmInterval);
+                timerAlarmInterval = null;
+            }
+        }
+
+        // --- INICIALIZACIÓN GLOBAL ---
+        window.onload = function() {
+            renderCalcItems();
+            updateCalcPreview();
+            const savedCalc = localStorage.getItem('mahoe_calc_history');
+            if (savedCalc) try { calcHistoryData = JSON.parse(savedCalc); } catch(e) {}
+            renderCalcHistory();
+
+            setFunkoRarity('comun');
+            const savedCustom = localStorage.getItem('mahoe_custom_pawn_history');
+            if (savedCustom) try { customHistoryData = JSON.parse(savedCustom); } catch(e) {}
+            renderCustomHistory();
+
+            const savedNotes = localStorage.getItem('mahoe_notes_list');
+            if (savedNotes) try { notesList = JSON.parse(savedNotes); } catch(e) {}
+            renderNotesList();
+
+            document.getElementById('fichaje-dia-ini').value = '12';
+            document.getElementById('fichaje-dia-fin').value = '18';
+            updateSemanaIdentificador();
+
+            const savedFichaje = localStorage.getItem('mahoe_fichaje_history');
+            if (savedFichaje) try { fichajeHistory = JSON.parse(savedFichaje); } catch(e) {}
+            renderFichajeHistory();
+
+            setCtrlCurrentDate();
+            loadCtrlData();
+            renderCtrlHistory();
+            updateCtrlStats();
+
+            resetTimer();
+        };
+    </script>
+</body>
+</html>
